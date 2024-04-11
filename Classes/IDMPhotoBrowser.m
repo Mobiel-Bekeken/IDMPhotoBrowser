@@ -574,6 +574,9 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 }
 
 - (UIImage*)getImageFromView:(UIView *)view {
+    if(view.bounds.size.width == 0 && view.bounds.size.height == 0) {
+        return NULL;
+    }
     UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:view.bounds.size];
     UIImage *image = [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull context) {
         [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:true];
