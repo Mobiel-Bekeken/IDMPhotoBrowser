@@ -574,10 +574,11 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 }
 
 - (UIImage*)getImageFromView:(UIView *)view {
-    UIGraphicsBeginImageContextWithOptions(view.bounds.size, YES, 2);
-    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:view.bounds.size];
+    UIImage *image = [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull context) {
+        [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:true];
+    }];
+  
     return image;
 }
 
