@@ -203,8 +203,22 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
             self.automaticallyAdjustsScrollViewInsets = NO;
 		}
 		
-        _applicationWindow = [[[UIApplication sharedApplication] delegate] window];
-		self.modalPresentationStyle = UIModalPresentationCustom;
+        //first try to get the UIWindow from the UIScene
+        for (UIWindowScene *scene in [UIApplication sharedApplication].connectedScenes) {
+            if ([scene isKindOfClass:[UIWindowScene class]]) {
+                id delegate = scene.delegate;
+                if ([delegate isKindOfClass:[SceneDelegate class]]) {
+                    SceneDelegate *sceneDelegate = (SceneDelegate *)delegate;
+                    _applicationWindow = sceneDelegate.window;
+                    break;
+                }
+            }
+        }
+        if(_applicationWindow == NULL) {
+            //probably not using UIScene
+            _applicationWindow = [[[UIApplication sharedApplication] delegate] window];
+        }
+        self.modalPresentationStyle = UIModalPresentationCustom;
 		self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 		self.modalPresentationCapturesStatusBarAppearance = YES;
 		self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
