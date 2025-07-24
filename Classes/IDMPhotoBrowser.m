@@ -203,21 +203,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
             self.automaticallyAdjustsScrollViewInsets = NO;
 		}
 		
-        //first try to get the UIWindow from the UIScene
-        for (UIWindowScene *scene in [UIApplication sharedApplication].connectedScenes) {
-            if ([scene isKindOfClass:[UIWindowScene class]]) {
-                id delegate = scene.delegate;
-                if ([delegate isKindOfClass:[SceneDelegate class]]) {
-                    SceneDelegate *sceneDelegate = (SceneDelegate *)delegate;
-                    _applicationWindow = sceneDelegate.window;
-                    break;
-                }
-            }
-        }
-        if(_applicationWindow == NULL) {
-            //probably not using UIScene
-            _applicationWindow = [[[UIApplication sharedApplication] delegate] window];
-        }
         self.modalPresentationStyle = UIModalPresentationCustom;
 		self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 		self.modalPresentationCapturesStatusBarAppearance = YES;
@@ -233,31 +218,35 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     return self;
 }
 
-- (id)initWithPhotos:(NSArray *)photosArray {
+- (id)initWithPhotos:(NSArray *)photosArray inWindow:(UIWindow *)window {
     if ((self = [self init])) {
+        _applicationWindow = window;
 		_photos = [[NSMutableArray alloc] initWithArray:photosArray];
 	}
 	return self;
 }
 
-- (id)initWithPhotos:(NSArray *)photosArray animatedFromView:(UIView*)view {
+- (id)initWithPhotos:(NSArray *)photosArray animatedFromView:(UIView*)view inWindow:(UIWindow *)window {
     if ((self = [self init])) {
+        _applicationWindow = window;
 		_photos = [[NSMutableArray alloc] initWithArray:photosArray];
         _senderViewForAnimation = view;
 	}
 	return self;
 }
 
-- (id)initWithPhotoURLs:(NSArray *)photoURLsArray {
+- (id)initWithPhotoURLs:(NSArray *)photoURLsArray inWindow:(UIWindow *)window {
     if ((self = [self init])) {
+        _applicationWindow = window;
         NSArray *photosArray = [IDMPhoto photosWithURLs:photoURLsArray];
 		_photos = [[NSMutableArray alloc] initWithArray:photosArray];
 	}
 	return self;
 }
 
-- (id)initWithPhotoURLs:(NSArray *)photoURLsArray animatedFromView:(UIView*)view {
+- (id)initWithPhotoURLs:(NSArray *)photoURLsArray animatedFromView:(UIView*)view inWindow:(UIWindow *)window {
     if ((self = [self init])) {
+        _applicationWindow = window;
         NSArray *photosArray = [IDMPhoto photosWithURLs:photoURLsArray];
 		_photos = [[NSMutableArray alloc] initWithArray:photosArray];
         _senderViewForAnimation = view;
