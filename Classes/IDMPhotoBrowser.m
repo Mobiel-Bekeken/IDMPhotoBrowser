@@ -71,10 +71,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     //UIImage *_backgroundScreenshot;
 
     UIWindow *_applicationWindow;
-
-	// iOS 7
-    UIViewController *_applicationTopViewController;
-    int _previousModalPresentationStyle;
 }
 
 // Private Properties
@@ -500,10 +496,9 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     // adjust bounds as the photo browser does
     if (@available(iOS 11.0, *)) {
         // use the windows safe area inset
-        UIWindow *window = [UIApplication sharedApplication].keyWindow;
         UIEdgeInsets insets = UIEdgeInsetsMake(_statusBarHeight, 0, 0, 0);
-        if (window != NULL) {
-            insets = window.safeAreaInsets;
+        if (_applicationWindow != NULL) {
+            insets = _applicationWindow.safeAreaInsets;
         }
         bounds = [self adjustForSafeArea:bounds adjustForStatusBar:NO forInsets:insets];
     }
@@ -550,11 +545,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     [self dismissViewControllerAnimated:animated completion:^{
         if ([_delegate respondsToSelector:@selector(photoBrowser:didDismissAtPageIndex:)])
             [_delegate photoBrowser:self didDismissAtPageIndex:_currentPageIndex];
-
-//		if (SYSTEM_VERSION_LESS_THAN(@"8.0"))
-//		{
-//			_applicationTopViewController.modalPresentationStyle = _previousModalPresentationStyle;
-//		}
     }];
 }
 
@@ -586,17 +576,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     }];
   
     return image;
-}
-
-- (UIViewController *)topviewController
-{
-    UIViewController *topviewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-
-    while (topviewController.presentedViewController) {
-        topviewController = topviewController.presentedViewController;
-    }
-
-    return topviewController;
 }
 
 #pragma mark - View Lifecycle
