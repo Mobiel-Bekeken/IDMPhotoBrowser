@@ -228,7 +228,11 @@ extension MenuViewController {
         let browser = IDMPhotoBrowser.init(photos: photos, in: self.view.window)
 		browser?.delegate = self
 
-		if indexPath.section == 1 { // Multiple photos
+        if indexPath.section == 0 { // Local photo
+            browser?.customButtonImage = UIImage.init(named: "IDMPhotoBrowser_customDoneButton.png")
+            browser?.displayDeleteButton = true
+        }
+		else if indexPath.section == 1 { // Multiple photos
 			if indexPath.row == 1 { // Photos from Flickr
 				browser?.displayCounterLabel = true
 				browser?.displayActionButton = false
@@ -278,4 +282,12 @@ extension MenuViewController {
 		
 		UIAlertView(title: "Option \(buttonIndex+1)", message: nil, delegate: nil, cancelButtonTitle: "OK").show()
 	}
+    
+    func photoBrowser(_ photoBrowser: IDMPhotoBrowser!, didRequestDelete photoIndex: UInt) {
+        print("Did request delete")
+    }
+    
+    func photoBrowser(_ photoBrowser: IDMPhotoBrowser!, didRequestCustomAction photoIndex: UInt) {
+        print("Did request custom action")
+    }
 }
