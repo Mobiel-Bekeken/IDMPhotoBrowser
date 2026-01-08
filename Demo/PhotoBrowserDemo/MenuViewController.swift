@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MenuViewController: UITableViewController, IDMPhotoBrowserDelegate { }
+class MenuViewController: UITableViewController, @MainActor IDMPhotoBrowserDelegate { }
 
 // MARK: View Lifecycle
 
@@ -59,6 +59,8 @@ extension MenuViewController {
 // MARK: Actions
 
 extension MenuViewController {
+    
+    @objc
 	func buttonWithImageOnScreenPressed(sender: AnyObject) {
 		let buttonSender = sender as? UIButton
 		
@@ -97,7 +99,7 @@ extension MenuViewController {
 		}
 		
 		// Create and setup browser
-		let browser: IDMPhotoBrowser = IDMPhotoBrowser(photos: photos, animatedFrom: buttonSender) // using initWithPhotos:animatedFromView:
+        let browser: IDMPhotoBrowser = IDMPhotoBrowser(photos: photos, animatedFrom: buttonSender, in: self.view.window) // using initWithPhotos:animatedFromView:
 		browser.delegate = self
 		browser.displayActionButton = false
 		browser.displayArrowButton = true
@@ -223,7 +225,7 @@ extension MenuViewController {
 		}
 
 		// Create and setup browser
-		let browser = IDMPhotoBrowser.init(photos: photos)
+        let browser = IDMPhotoBrowser.init(photos: photos, in: self.view.window)
 		browser?.delegate = self
 
 		if indexPath.section == 1 { // Multiple photos
