@@ -592,11 +592,16 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     
     // Toolbar
     _toolbar = [UIToolbar new];
-//    _toolbar.backgroundColor = [UIColor clearColor];
-//    _toolbar.translucent = YES;
-//    [_toolbar setBackgroundImage:[UIImage new]
-//              forToolbarPosition:UIToolbarPositionAny
-//                      barMetrics:UIBarMetricsDefault];
+    if (@available(iOS 26.0, *)) {
+        //no need and no effect to change appearance
+    }
+    else {
+        _toolbar.backgroundColor = [UIColor clearColor];
+        _toolbar.translucent = YES;
+        [_toolbar setBackgroundImage:[UIImage new]
+                  forToolbarPosition:UIToolbarPositionAny
+                          barMetrics:UIBarMetricsDefault];
+    }
     
     // Close Button
     _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
