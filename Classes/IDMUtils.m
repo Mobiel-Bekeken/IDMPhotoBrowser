@@ -13,9 +13,9 @@
  *
  * NOTE: this does not cover all cases. Given a rect it will reposition it if it
  * falls into an unsafe area according to `insets` and `bounds`. When
- * `adjustForStatusBar` is true, the rect y position will be based from the edge
+ * `adjustForStatusBar` is true, the rect y position and height will be based from the edge
  * of the safe area, otherwise it will be based from zero. This allows views to
- * sit behind the status bar. Status bar height is also used
+ * sit behind the status bar and bottom bar. Status bar height is also used
  * to keep positioning consistent when toggling the status bar on and off
  */
 + (CGRect)adjustRect:(CGRect)rect forSafeAreaInsets:(UIEdgeInsets)insets forBounds:(CGRect)bounds adjustForStatusBar:(BOOL)adjust statusBarHeight:(int)statusBarHeight {
@@ -42,9 +42,9 @@
         rect.size.height -= insets.bottom + insetTop;
     } else if ((adjust) && (isAtTop)) {
         rect.origin.y += insetTop;
-    } else if ((isAtTop) && (isAtBottom)) {
+    } else if (adjust && (isAtTop) && (isAtBottom)) {
         rect.size.height -= insets.bottom;
-    } else if (isAtBottom) {
+    } else if (adjust && isAtBottom) {
         rect.origin.y -= insets.bottom;
     }
     return rect;

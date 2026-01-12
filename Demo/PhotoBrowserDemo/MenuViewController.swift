@@ -107,7 +107,7 @@ extension MenuViewController {
 		browser.usePopAnimation = true
 		browser.scaleImage = buttonSender?.currentImage
 		browser.dismissOnTouch = true
-		
+        
 		// Show
 		self.present(browser, animated: true, completion: nil)
 	}

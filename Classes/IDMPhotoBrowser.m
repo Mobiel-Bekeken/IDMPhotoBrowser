@@ -168,7 +168,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         _displayArrowButton = YES;
         _displayCounterLabel = YES;
         
-        _forceHideStatusBar = NO;
+        _forceHideStatusBar = YES;
         _usePopAnimation = NO;
         _disableVerticalSwipe = NO;
         
@@ -1129,7 +1129,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     CGRect pageFrame = [self frameForPageAtIndex:index];
     
     CGSize captionSize = [captionView sizeThatFits:CGSizeMake(pageFrame.size.width, 0)];
-    CGRect captionFrame = CGRectMake(pageFrame.origin.x, pageFrame.size.height - captionSize.height - (_toolbar.superview?_toolbar.frame.size.height:0), pageFrame.size.width, captionSize.height);
+    CGRect captionFrame = CGRectMake(pageFrame.origin.x, pageFrame.size.height - captionSize.height - (_toolbar.superview?_toolbar.frame.size.height:0) - self.view.safeAreaInsets.bottom, pageFrame.size.width, captionSize.height);
     
     return captionFrame;
 }
