@@ -42,9 +42,9 @@
 @property (nonatomic) BOOL displayActionButton;
 @property (nonatomic) BOOL displayDeleteButton;
 @property (nonatomic, strong) UIImage *customButtonImage;
-@property (nonatomic, strong) UIImage *leftArrowImage, *leftArrowSelectedImage;
-@property (nonatomic, strong) UIImage *rightArrowImage, *rightArrowSelectedImage;
-@property (nonatomic, strong) UIImage *actionButtonImage, *actionButtonSelectedImage;
+@property (nonatomic, strong) UIImage *leftArrowImage;
+@property (nonatomic, strong) UIImage *rightArrowImage;
+@property (nonatomic, strong) UIImage *actionButtonImage;
 
 // View customization
 @property (nonatomic) BOOL displayDoneButton;

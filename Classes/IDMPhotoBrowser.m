@@ -130,7 +130,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 
 // Properties
 @synthesize displayDoneButton = _displayDoneButton, displayToolbar = _displayToolbar, displayActionButton = _displayActionButton, displayCounterLabel = _displayCounterLabel, useWhiteBackgroundColor = _useWhiteBackgroundColor, doneButtonImage = _doneButtonImage;
-@synthesize leftArrowImage = _leftArrowImage, rightArrowImage = _rightArrowImage, leftArrowSelectedImage = _leftArrowSelectedImage, rightArrowSelectedImage = _rightArrowSelectedImage, actionButtonImage = _actionButtonImage, actionButtonSelectedImage = _actionButtonSelectedImage;
+@synthesize leftArrowImage = _leftArrowImage, rightArrowImage = _rightArrowImage, actionButtonImage = _actionButtonImage;
 @synthesize displayArrowButton = _displayArrowButton;
 @synthesize arrowButtonsChangePhotosAnimated = _arrowButtonsChangePhotosAnimated;
 @synthesize forceHideStatusBar = _forceHideStatusBar;
@@ -175,7 +175,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         _dismissOnTouch = NO;
         
         _useWhiteBackgroundColor = NO;
-        _leftArrowImage = _rightArrowImage = _leftArrowSelectedImage = _rightArrowSelectedImage = nil;
         
         _arrowButtonsChangePhotosAnimated = YES;
         
@@ -546,16 +545,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     }];
 }
 
-- (UIButton*)customToolbarButtonImage:(UIImage*)image imageSelected:(UIImage*)selectedImage action:(SEL)action {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setImage:image forState:UIControlStateNormal];
-    [button setImage:selectedImage forState:UIControlStateDisabled];
-    [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
-    [button setContentMode:UIViewContentModeCenter];
-    [button setFrame:[self getToolbarButtonFrame:image]];
-    return button;
-}
-
 - (CGRect)getToolbarButtonFrame:(UIImage *)image{
     BOOL const isRetinaHd = ((float)[[UIScreen mainScreen] scale] > 2.0f);
     float const defaultButtonSize = isRetinaHd ? 104.0f : 52.0f;
@@ -603,11 +592,11 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     
     // Toolbar
     _toolbar = [UIToolbar new];
-    _toolbar.backgroundColor = [UIColor clearColor];
-    _toolbar.translucent = YES;
-    [_toolbar setBackgroundImage:[UIImage new]
-              forToolbarPosition:UIToolbarPositionAny
-                      barMetrics:UIBarMetricsDefault];
+//    _toolbar.backgroundColor = [UIColor clearColor];
+//    _toolbar.translucent = YES;
+//    [_toolbar setBackgroundImage:[UIImage new]
+//              forToolbarPosition:UIToolbarPositionAny
+//                      barMetrics:UIBarMetricsDefault];
     
     // Close Button
     _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -636,26 +625,15 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     UIImage *rightButtonImage = (_rightArrowImage == nil) ?
     [UIImage imageNamed:@"IDMPhotoBrowser.bundle/images/IDMPhotoBrowser_arrowRight.png"]         : _rightArrowImage;
     
-    UIImage *leftButtonSelectedImage = (_leftArrowSelectedImage == nil) ?
-    [UIImage imageNamed:@"IDMPhotoBrowser.bundle/images/IDMPhotoBrowser_arrowLeftSelected.png"]  : _leftArrowSelectedImage;
-    
-    UIImage *rightButtonSelectedImage = (_rightArrowSelectedImage == nil) ?
-    [UIImage imageNamed:@"IDMPhotoBrowser.bundle/images/IDMPhotoBrowser_arrowRightSelected.png"] : _rightArrowSelectedImage;
-    
     // Arrows
-    _previousButton = [[UIBarButtonItem alloc] initWithCustomView:[self customToolbarButtonImage:leftButtonImage
-                                                                                   imageSelected:leftButtonSelectedImage
-                                                                                          action:@selector(gotoPreviousPage)]];
+    _previousButton = [[UIBarButtonItem alloc] initWithImage:leftButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(gotoPreviousPage)];
     
-    _nextButton = [[UIBarButtonItem alloc] initWithCustomView:[self customToolbarButtonImage:rightButtonImage
-                                                                               imageSelected:rightButtonSelectedImage
-                                                                                      action:@selector(gotoNextPage)]];
+    _nextButton = [[UIBarButtonItem alloc] initWithImage:rightButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(gotoNextPage)];
     
     // Counter Label
-    _counterLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 95, 40)];
-    _counterLabel.textAlignment = NSTextAlignmentCenter;
+    _counterLabel = [UILabel new];
     _counterLabel.backgroundColor = [UIColor clearColor];
-    _counterLabel.font = [UIFont systemFontOfSize:17.0];
+    _counterLabel.font = [UIFont systemFontOfSize:16.0];
     
     if(_useWhiteBackgroundColor == NO) {
         _counterLabel.textColor = [UIColor whiteColor];
@@ -673,10 +651,8 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     }
     
     // Action Button
-    if(_actionButtonImage != nil && _actionButtonSelectedImage != nil) {
-        _actionButton = [[UIBarButtonItem alloc] initWithCustomView:[self customToolbarButtonImage:_actionButtonImage
-                                                                                     imageSelected:_actionButtonSelectedImage
-                                                                                            action:@selector(actionButtonPressed:)]];
+    if(_actionButtonImage != nil) {
+        _actionButton = [[UIBarButtonItem alloc] initWithImage:_actionButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(actionButtonPressed:)];
     }
     else {
         _actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
@@ -689,9 +665,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
                                                                         action:@selector(actionButtonDeletePressed:)];
     
     if(self.customButtonImage != NULL) {
-        _actionCustomButton = [[UIBarButtonItem alloc] initWithCustomView:[self customToolbarButtonImage:_customButtonImage
-                                                                                     imageSelected:_customButtonImage
-                                                                                            action:@selector(actionButtonCustomPressed:)]];
+        _actionCustomButton = [[UIBarButtonItem alloc] initWithImage:_customButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(actionButtonCustomPressed:)];
     }
     
     // Gesture
@@ -847,15 +821,10 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         [self.view addSubview:_doneButton];
     
     // Toolbar items & navigation
-    UIBarButtonItem *fixedLeftSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
-                                                                                    target:self action:nil];
-    fixedLeftSpace.width = 32; // To balance action button
     UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                                target:self action:nil];
     NSMutableArray *items = [NSMutableArray new];
     
-    if (_displayActionButton)
-        [items addObject:fixedLeftSpace];
     [items addObject:flexSpace];
     
     if (numberOfPhotos > 1 && _displayArrowButton)

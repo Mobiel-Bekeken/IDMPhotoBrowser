@@ -229,7 +229,7 @@ extension MenuViewController {
 		browser?.delegate = self
 
         if indexPath.section == 0 { // Local photo
-            browser?.customButtonImage = UIImage.init(named: "IDMPhotoBrowser_customDoneButton.png")
+            browser?.customButtonImage = UIImage.init(named: "IDMPhotoBrowser_customDoneButton.png")?.withRenderingMode(.alwaysOriginal)
             browser?.displayDeleteButton = true
         }
 		else if indexPath.section == 1 { // Multiple photos
@@ -244,8 +244,6 @@ extension MenuViewController {
 				browser?.useWhiteBackgroundColor = true
 				browser?.leftArrowImage          = UIImage.init(named: "IDMPhotoBrowser_customArrowLeft.png")
 				browser?.rightArrowImage         = UIImage.init(named: "IDMPhotoBrowser_customArrowRight.png")
-				browser?.leftArrowSelectedImage  = UIImage.init(named: "IDMPhotoBrowser_customArrowLeftSelected.png")
-				browser?.rightArrowSelectedImage = UIImage.init(named: "IDMPhotoBrowser_customArrowRightSelected.png")
 				browser?.doneButtonImage         = UIImage.init(named: "IDMPhotoBrowser_customDoneButton.png")
 				browser?.view.tintColor          = UIColor.orange
 				browser?.progressTintColor       = UIColor.orange
