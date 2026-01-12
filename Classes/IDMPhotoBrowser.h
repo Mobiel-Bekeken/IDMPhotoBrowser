@@ -23,15 +23,14 @@
 - (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didShowPhotoAtIndex:(NSUInteger)index;
 - (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didDismissAtPageIndex:(NSUInteger)index;
 - (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser willDismissAtPageIndex:(NSUInteger)index;
-- (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didDismissActionSheetWithButtonIndex:(NSUInteger)buttonIndex photoIndex:(NSUInteger)photoIndex;
-- (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didRequestDelete:(NSUInteger)photoIndex;
-- (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didRequestCustomAction:(NSUInteger)photoIndex;
+- (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didRequestDelete:(NSURL *)photoURL;
+- (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didRequestCustomAction:(NSURL *)photoURL;
 - (IDMCaptionView *)photoBrowser:(IDMPhotoBrowser *)photoBrowser captionViewForPhotoAtIndex:(NSUInteger)index;
 - (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser imageFailed:(NSUInteger)index imageView:(IDMTapDetectingImageView *)imageView;
 @end
 
 // IDMPhotoBrowser
-@interface IDMPhotoBrowser : UIViewController <UIScrollViewDelegate, UIActionSheetDelegate>
+@interface IDMPhotoBrowser : UIViewController <UIScrollViewDelegate>
 
 // Properties
 @property (nonatomic, strong) id <IDMPhotoBrowserDelegate> delegate;
@@ -42,7 +41,6 @@
 @property (nonatomic) BOOL displayArrowButton;
 @property (nonatomic) BOOL displayActionButton;
 @property (nonatomic) BOOL displayDeleteButton;
-@property (nonatomic, strong) NSArray *actionButtonTitles;
 @property (nonatomic, strong) UIImage *customButtonImage;
 @property (nonatomic, strong) UIImage *leftArrowImage, *leftArrowSelectedImage;
 @property (nonatomic, strong) UIImage *rightArrowImage, *rightArrowSelectedImage;

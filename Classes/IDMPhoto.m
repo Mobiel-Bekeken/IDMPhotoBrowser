@@ -124,6 +124,14 @@ caption = _caption;
     return _underlyingImage;
 }
 
+- (NSURL * _Nullable)photoURL {
+    return _photoURL;
+}
+
+- (NSString * _Nullable)photoPath {
+    return _photoPath;
+}
+
 - (void)loadUnderlyingImageAndNotify {
     NSAssert([[NSThread currentThread] isMainThread], @"This method must be called on the main thread.");
     _loadingInProgress = YES;
