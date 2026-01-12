@@ -233,7 +233,10 @@ extension MenuViewController {
             browser?.displayDeleteButton = true
         }
 		else if indexPath.section == 1 { // Multiple photos
-			if indexPath.row == 1 { // Photos from Flickr
+            if indexPath.row == 0 { // Local photos
+                browser?.autoHideInterface = false
+            }
+			else if indexPath.row == 1 { // Photos from Flickr
 				browser?.displayCounterLabel = false
 				browser?.displayActionButton = false
 			} else if indexPath.row == 2 { // Photos from Flickr - Custom

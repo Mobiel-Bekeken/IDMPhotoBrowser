@@ -28,6 +28,8 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 
     // Gesture
     UIPanGestureRecognizer *_panGesture;
+    
+    CGRect didCallViewWillLayoutSubviewsRect;
 
 	// Paging
     NSMutableSet *_visiblePages, *_recycledPages;
@@ -93,7 +95,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 - (CGRect)frameForPageAtIndex:(NSUInteger)index;
 - (CGSize)contentSizeForPagingScrollView;
 - (CGPoint)contentOffsetForPageAtIndex:(NSUInteger)index;
-- (CGRect)frameForToolbarAtOrientation:(UIInterfaceOrientation)orientation;
 - (CGRect)frameForDoneButtonAtOrientation:(UIInterfaceOrientation)orientation;
 - (CGRect)frameForCaptionView:(IDMCaptionView *)captionView atIndex:(NSUInteger)index;
 
@@ -601,9 +602,8 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     UIInterfaceOrientation currentOrientation = [UIApplication sharedApplication].statusBarOrientation;
     
     // Toolbar
-    _toolbar = [[UIToolbar alloc] initWithFrame:[self frameForToolbarAtOrientation:currentOrientation]];
+    _toolbar = [UIToolbar new];
     _toolbar.backgroundColor = [UIColor clearColor];
-    _toolbar.clipsToBounds = YES;
     _toolbar.translucent = YES;
     [_toolbar setBackgroundImage:[UIImage new]
               forToolbarPosition:UIToolbarPositionAny
@@ -655,12 +655,10 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     _counterLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 95, 40)];
     _counterLabel.textAlignment = NSTextAlignmentCenter;
     _counterLabel.backgroundColor = [UIColor clearColor];
-    _counterLabel.font = [UIFont fontWithName:@"Helvetica" size:17];
+    _counterLabel.font = [UIFont systemFontOfSize:17.0];
     
     if(_useWhiteBackgroundColor == NO) {
         _counterLabel.textColor = [UIColor whiteColor];
-        _counterLabel.shadowColor = [UIColor darkTextColor];
-        _counterLabel.shadowOffset = CGSizeMake(0, 1);
     }
     else {
         _counterLabel.textColor = [UIColor blackColor];
@@ -777,13 +775,14 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 #pragma mark - Layout
 
 - (void)viewWillLayoutSubviews {
+    if(CGRectEqualToRect(didCallViewWillLayoutSubviewsRect, self.view.frame)) {
+        return;
+    }
+    didCallViewWillLayoutSubviewsRect = self.view.frame;
     // Flag
     _performingLayout = YES;
     
     UIInterfaceOrientation currentOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-    // Toolbar
-    _toolbar.frame = [self frameForToolbarAtOrientation:currentOrientation];
     
     // Done button
     _doneButton.frame = [self frameForDoneButtonAtOrientation:currentOrientation];
@@ -800,6 +799,8 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     
     // Recalculate contentSize based on current orientation
     _pagingScrollView.contentSize = [self contentSizeForPagingScrollView];
+    
+    [_toolbar layoutIfNeeded];
     
     // Adjust frames and configuration of each visible page
     for (IDMZoomingScrollView *page in _visiblePages) {
@@ -832,7 +833,11 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     
     // Toolbar
     if (_displayToolbar) {
+        _toolbar.translatesAutoresizingMaskIntoConstraints = false;
         [self.view addSubview:_toolbar];
+        [_toolbar.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor].active = true;
+        [_toolbar.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor].active = true;
+        [_toolbar.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor].active = true;
     } else {
         [_toolbar removeFromSuperview];
     }
@@ -1142,17 +1147,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     return UIInterfaceOrientationIsLandscape(orientation);
 }
 
-- (CGRect)frameForToolbarAtOrientation:(UIInterfaceOrientation)orientation {
-    CGFloat height = 52;
-    
-    //    if ([self isLandscape:orientation])
-    //        height = 32;
-    
-    CGRect rtn = CGRectMake(0, self.view.bounds.size.height - height, self.view.bounds.size.width, height);
-    rtn = [self adjustForSafeArea:rtn adjustForStatusBar:true];
-    return rtn;
-}
-
 - (CGRect)frameForDoneButtonAtOrientation:(UIInterfaceOrientation)orientation {
     CGRect screenBound = self.view.bounds;
     CGFloat screenWidth = screenBound.size.width;
@@ -1172,11 +1166,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 }
 
 - (CGRect)adjustForSafeArea:(CGRect)rect adjustForStatusBar:(BOOL)adjust {
-    if (@available(iOS 11.0, *)) {
-        return [self adjustForSafeArea:rect adjustForStatusBar:adjust forInsets:self.view.safeAreaInsets];
-    }
-    UIEdgeInsets insets = UIEdgeInsetsMake(_statusBarHeight, 0, 0, 0);
-    return [self adjustForSafeArea:rect adjustForStatusBar:adjust forInsets:insets];
+    return [self adjustForSafeArea:rect adjustForStatusBar:adjust forInsets:self.view.safeAreaInsets];
 }
 
 - (CGRect)adjustForSafeArea:(CGRect)rect adjustForStatusBar:(BOOL)adjust forInsets:(UIEdgeInsets) insets {
@@ -1235,7 +1225,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 
 - (void)jumpToPageAtIndex:(NSUInteger)index {
     // Change page
-    NSLog(@"to page");
     if (index < [self numberOfPhotos]) {
         CGRect pageFrame = [self frameForPageAtIndex:index];
         
@@ -1254,7 +1243,9 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     [self hideControlsAfterDelay];
 }
 
-- (void)gotoPreviousPage { [self jumpToPageAtIndex:_currentPageIndex-1]; }
+- (void)gotoPreviousPage {
+    [self jumpToPageAtIndex:_currentPageIndex-1];
+}
 - (void)gotoNextPage     { [self jumpToPageAtIndex:_currentPageIndex+1]; }
 
 #pragma mark - Control Hiding / Showing
