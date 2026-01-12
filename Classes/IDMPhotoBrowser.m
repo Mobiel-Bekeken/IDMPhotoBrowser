@@ -1319,7 +1319,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 }
 - (void)handleSingleTap {
     if (_dismissOnTouch) {
-        [self doneButtonPressed:nil];
+        [self close];
     } else {
         [self setControlsHidden:![self areControlsHidden] animated:YES permanent:NO];
     }
@@ -1342,6 +1342,10 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 #pragma mark - Buttons
 
 - (void)doneButtonPressed:(id)sender {
+    [self close];
+}
+
+- (void) close {
     if ([_delegate respondsToSelector:@selector(willDisappearPhotoBrowser:)]) {
         [_delegate willDisappearPhotoBrowser:self];
     }

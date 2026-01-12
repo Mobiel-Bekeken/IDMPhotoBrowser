@@ -281,5 +281,6 @@ extension MenuViewController {
     
     func photoBrowser(_ photoBrowser: IDMPhotoBrowser!, didRequestCustomAction photoURL: URL!) {
         print("Did request custom action of url: \(photoURL.absoluteString)")
+        photoBrowser.close()
     }
 }

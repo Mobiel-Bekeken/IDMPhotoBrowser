@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name          =  "IDMPhotoBrowser"
   s.summary       =  "Photo Browser / Viewer inspired by Facebook's and Tweetbot's with ARC support, swipe-to-dismiss, image progress and more."
-  s.version       =  "2.0"
+  s.version       =  "2.0.1"
   s.homepage      =  "https://github.com/ideaismobile/IDMPhotoBrowser"
   s.license       =  { :type => 'MIT', :file => 'LICENSE.txt' }
   s.author        =  { "Eduardo Callado" => "eduardo_tasker@hotmail.com" }
