@@ -196,7 +196,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
             self.automaticallyAdjustsScrollViewInsets = NO;
         }
         
-        self.modalPresentationStyle = UIModalPresentationCustom;
+        self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         self.modalPresentationCapturesStatusBarAppearance = YES;
         self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
@@ -360,16 +360,11 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 #pragma mark - Animation
 
 - (void)performPresentAnimation {
-    self.view.alpha = 0.0f;
     _pagingScrollView.alpha = 0.0f;
     
     UIImage *imageFromView = _scaleImage ? _scaleImage : [self getImageFromView:_senderViewForAnimation];
     
     _senderViewOriginalFrame = [_senderViewForAnimation.superview convertRect:_senderViewForAnimation.frame toView:nil];
-    
-    UIView *fadeView = [[UIView alloc] initWithFrame:_applicationWindow.bounds];
-    fadeView.backgroundColor = [UIColor clearColor];
-    [_applicationWindow addSubview:fadeView];
     
     UIImageView *resizableImageView = [[UIImageView alloc] initWithImage:imageFromView];
     resizableImageView.frame = _senderViewOriginalFrame;
@@ -385,16 +380,10 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     _senderViewForAnimation.hidden = YES;
     
     void (^completion)() = ^() {
-        self.view.alpha = 1.0f;
         _pagingScrollView.alpha = 1.0f;
         resizableImageView.backgroundColor = [UIColor colorWithWhite:(_useWhiteBackgroundColor) ? 1 : 0 alpha:1];
-        [fadeView removeFromSuperview];
         [resizableImageView removeFromSuperview];
     };
-    
-    [UIView animateWithDuration:_animationDuration animations:^{
-        fadeView.backgroundColor = self.useWhiteBackgroundColor ? [UIColor whiteColor] : [UIColor blackColor];
-    } completion:nil];
     
     CGRect finalImageViewFrame = [self animationFrameForImage:imageFromView presenting:YES scrollView:nil];
     
