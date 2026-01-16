@@ -192,10 +192,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         
         _doneButtonSize = CGSizeMake(55.f, 26.f);
         
-        if ([self respondsToSelector:@selector(automaticallyAdjustsScrollViewInsets)]) {
-            self.automaticallyAdjustsScrollViewInsets = NO;
-        }
-        
         self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         self.modalPresentationCapturesStatusBarAppearance = YES;
@@ -569,6 +565,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     _pagingScrollView.pagingEnabled = YES;
     _pagingScrollView.delegate = self;
     _pagingScrollView.showsHorizontalScrollIndicator = NO;
+    _pagingScrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     _pagingScrollView.showsVerticalScrollIndicator = NO;
     _pagingScrollView.backgroundColor = [UIColor clearColor];
     _pagingScrollView.contentSize = [self contentSizeForPagingScrollView];
@@ -594,7 +591,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     
     // Close Button
     _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_doneButton setFrame:[self frameForDoneButtonAtOrientation:currentOrientation]];
+    _doneButton.translatesAutoresizingMaskIntoConstraints = false;
     [_doneButton setAlpha:1.0f];
     [_doneButton addTarget:self action:@selector(doneButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -606,7 +603,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         _doneButton.layer.cornerRadius = 3.0f;
         _doneButton.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:0.9].CGColor;
         _doneButton.layer.borderWidth = 1.0f;
-        _doneButtonSize = _doneButton.frame.size;
     }
     else {
         [_doneButton setImage:_doneButtonImage forState:UIControlStateNormal];
@@ -752,10 +748,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     
     UIInterfaceOrientation currentOrientation = [UIApplication sharedApplication].statusBarOrientation;
     
-    // Done button
-    _doneButton.frame = [self frameForDoneButtonAtOrientation:currentOrientation];
-    
-    
     // Remember index
     NSUInteger indexPriorToLayout = _currentPageIndex;
     
@@ -811,8 +803,13 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     }
     
     // Close button
-    if(_displayDoneButton && !self.navigationController.navigationBar)
+    if(_displayDoneButton && !self.navigationController.navigationBar) {
         [self.view addSubview:_doneButton];
+        [_doneButton.widthAnchor constraintEqualToConstant:_doneButtonSize.width].active = true;
+        [_doneButton.heightAnchor constraintEqualToConstant:_doneButtonSize.height].active = true;
+        [_doneButton.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-self.doneButtonRightInset].active = true;
+        [_doneButton.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor constant:self.doneButtonTopInset].active = true;
+    }
     
     // Toolbar items & navigation
     UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
@@ -1075,9 +1072,8 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 
 - (CGRect)frameForPagingScrollView {
     CGRect frame = self.view.bounds;
-    frame.origin.x -= PADDING;
+    frame.origin.x -= PADDING * 2;
     frame.size.width += (2 * PADDING);
-    frame = [self adjustForSafeArea:frame adjustForStatusBar:false];
     return frame;
 }
 
@@ -1089,7 +1085,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     CGRect bounds = _pagingScrollView.bounds;
     CGRect pageFrame = bounds;
     pageFrame.size.width -= (2 * PADDING);
-    pageFrame.origin.x = (bounds.size.width * index) + PADDING;
+    pageFrame.origin.x = (bounds.size.width * index);
     return pageFrame;
 }
 
@@ -1108,15 +1104,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 - (BOOL)isLandscape:(UIInterfaceOrientation)orientation
 {
     return UIInterfaceOrientationIsLandscape(orientation);
-}
-
-- (CGRect)frameForDoneButtonAtOrientation:(UIInterfaceOrientation)orientation {
-    CGRect screenBound = self.view.bounds;
-    CGFloat screenWidth = screenBound.size.width;
-    
-    CGRect rtn = CGRectMake(screenWidth - self.doneButtonRightInset - self.doneButtonSize.width, self.doneButtonTopInset, self.doneButtonSize.width, self.doneButtonSize.height);
-    rtn = [self adjustForSafeArea:rtn adjustForStatusBar:true];
-    return rtn;
 }
 
 - (CGRect)frameForCaptionView:(IDMCaptionView *)captionView atIndex:(NSUInteger)index {

@@ -199,7 +199,7 @@
 	}
     
 	// Calculate Max
-	CGFloat maxScale = 4.0; // Allow double scale
+	CGFloat maxScale = 6.0;
     // on high resolution screens we have double the pixel density, so we will be seeing every pixel if we limit the
     // maximum zoom scale to 0.5.
 	if ([UIScreen instancesRespondToSelector:@selector(scale)]) {
@@ -211,21 +211,9 @@
 	}
 
 	// Calculate Max Scale Of Double Tap
-	CGFloat maxDoubleTapZoomScale = 4.0 * minScale; // Allow double scale
-    // on high resolution screens we have double the pixel density, so we will be seeing every pixel if we limit the
-    // maximum zoom scale to 0.5.
-	if ([UIScreen instancesRespondToSelector:@selector(scale)]) {
-        maxDoubleTapZoomScale = maxDoubleTapZoomScale / [[UIScreen mainScreen] scale];
-        
-        if (maxDoubleTapZoomScale < minScale) {
-            maxDoubleTapZoomScale = minScale * 2;
-        }
-    }
+	CGFloat maxDoubleTapZoomScale = 0.8 * maxScale;
     
-    // Make sure maxDoubleTapZoomScale isn't larger than maxScale
-    maxDoubleTapZoomScale = MIN(maxDoubleTapZoomScale, maxScale);
-    
-	// Set
+    // Set
 	self.maximumZoomScale = maxScale;
 	self.minimumZoomScale = minScale;
 	self.zoomScale = minScale;
@@ -304,7 +292,7 @@
 	[NSObject cancelPreviousPerformRequestsWithTarget:_photoBrowser];
 	
 	// Zoom
-	if (self.zoomScale == self.maximumDoubleTapZoomScale) {
+	if (self.zoomScale > self.minimumZoomScale) {
 		
 		// Zoom out
 		[self setZoomScale:self.minimumZoomScale animated:YES];
@@ -313,7 +301,7 @@
 		
 		// Zoom in
 		CGSize targetSize = CGSizeMake(self.frame.size.width / self.maximumDoubleTapZoomScale, self.frame.size.height / self.maximumDoubleTapZoomScale);
-		CGPoint targetPoint = CGPointMake(touchPoint.x - targetSize.width / 2, touchPoint.y - targetSize.height / 2);
+		CGPoint targetPoint = CGPointMake(touchPoint.x - targetSize.width / 2 - self.safeAreaInsets.left, touchPoint.y - targetSize.height / 2 - self.safeAreaInsets.top);
 		
 		[self zoomToRect:CGRectMake(targetPoint.x, targetPoint.y, targetSize.width, targetSize.height) animated:YES];
 		
