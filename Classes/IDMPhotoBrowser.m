@@ -365,7 +365,8 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     UIImageView *resizableImageView = [[UIImageView alloc] initWithImage:imageFromView];
     resizableImageView.frame = _senderViewOriginalFrame;
     resizableImageView.clipsToBounds = YES;
-    resizableImageView.contentMode = _senderViewForAnimation ? _senderViewForAnimation.contentMode : UIViewContentModeScaleAspectFill;
+    
+    resizableImageView.contentMode = [self contentModeForImage];
     resizableImageView.backgroundColor = [UIColor clearColor];
     if (@available(iOS 11.0, *)) {
         resizableImageView.accessibilityIgnoresInvertColors = YES;
@@ -399,6 +400,22 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     }
 }
 
+- (UIViewContentMode) contentModeForImage {
+    UIViewContentMode contentMode = UIViewContentModeScaleAspectFill;
+    if(_senderViewForAnimation != nil) {
+        if([_senderViewForAnimation isKindOfClass:UIButton.class]) {
+            UIImageView *imageView = ((UIButton *)_senderViewForAnimation).imageView;
+            if(imageView != NULL) {
+                contentMode = imageView.contentMode;
+            }
+        }
+        else {
+            contentMode = _senderViewForAnimation.contentMode;
+        }
+    }
+    return contentMode;
+}
+
 - (void)performCloseAnimationWithScrollView:(IDMZoomingScrollView*)scrollView {
     if ([_delegate respondsToSelector:@selector(willDisappearPhotoBrowser:)]) {
         [_delegate willDisappearPhotoBrowser:self];
@@ -420,7 +437,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     
     UIImageView *resizableImageView = [[UIImageView alloc] initWithImage:imageFromView];
     resizableImageView.frame = imageViewFrame;
-    resizableImageView.contentMode = _senderViewForAnimation ? _senderViewForAnimation.contentMode : UIViewContentModeScaleAspectFill;
+    resizableImageView.contentMode = [self contentModeForImage];
     resizableImageView.backgroundColor = [UIColor clearColor];
     resizableImageView.clipsToBounds = YES;
     if (@available(iOS 11.0, *)) {
@@ -475,15 +492,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     CGSize imageSize = image.size;
     
     CGRect bounds = _applicationWindow.bounds;
-    // adjust bounds as the photo browser does
-    if (@available(iOS 11.0, *)) {
-        // use the windows safe area inset
-        UIEdgeInsets insets = UIEdgeInsetsMake(_statusBarHeight, 0, 0, 0);
-        if (_applicationWindow != NULL) {
-            insets = _applicationWindow.safeAreaInsets;
-        }
-        bounds = [self adjustForSafeArea:bounds adjustForStatusBar:NO forInsets:insets];
-    }
     CGFloat maxWidth = CGRectGetWidth(bounds);
     CGFloat maxHeight = CGRectGetHeight(bounds);
     
