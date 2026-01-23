@@ -22,7 +22,7 @@ extension MenuViewController {
 
 extension MenuViewController {
 	override var prefersStatusBarHidden: Bool {
-		return true
+		return false
 	}
 }
 
@@ -99,7 +99,7 @@ extension MenuViewController {
 		}
 		
 		// Create and setup browser
-        let browser: IDMPhotoBrowser = IDMPhotoBrowser(photos: photos, animatedFrom: buttonSender, in: self.view.window) // using initWithPhotos:animatedFromView:
+        let browser: IDMPhotoBrowser = IDMPhotoBrowser(photos: photos, animatedFrom: buttonSender, from: self)
 		browser.delegate = self
 		browser.displayActionButton = false
 		browser.displayArrowButton = true
@@ -178,7 +178,6 @@ extension MenuViewController {
 
 extension MenuViewController {
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		tableView.deselectRow(at: indexPath, animated: true)
 		
 		// Create an array to store IDMPhoto objects
 		var photos: [IDMPhoto] = []
@@ -225,9 +224,9 @@ extension MenuViewController {
 		}
 
 		// Create and setup browser
-        let browser = IDMPhotoBrowser.init(photos: photos, in: self.view.window)
+        let browser = IDMPhotoBrowser.init(photos: photos, animatedFrom: nil, from: self)
 		browser?.delegate = self
-
+        
         if indexPath.section == 0 { // Local photo
             browser?.customButtonImage = UIImage.init(named: "IDMPhotoBrowser_customDoneButton.png")?.withRenderingMode(.alwaysOriginal)
             browser?.displayDeleteButton = true
@@ -242,7 +241,7 @@ extension MenuViewController {
 			} else if indexPath.row == 2 { // Photos from Flickr - Custom
 				browser?.displayCounterLabel     = true
 				browser?.useWhiteBackgroundColor = true
-				browser?.leftArrowImage          = UIImage.init(named: "IDMPhotoBrowser_customArrowLeft.png")
+                browser?.leftArrowImage          = UIImage.init(named: "IDMPhotoBrowser_customArrowLeft.png")
 				browser?.rightArrowImage         = UIImage.init(named: "IDMPhotoBrowser_customArrowRight.png")
 				browser?.doneButtonImage         = UIImage.init(named: "IDMPhotoBrowser_customDoneButton.png")
 				browser?.view.tintColor          = UIColor.orange

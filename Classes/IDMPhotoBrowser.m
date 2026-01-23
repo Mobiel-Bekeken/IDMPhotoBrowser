@@ -56,6 +56,8 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 
     // Present
     UIView *_senderViewForAnimation;
+    
+    BOOL _forceHideStatusBar;
 
     // Misc
     BOOL _performingLayout;
@@ -95,7 +97,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 - (CGRect)frameForPageAtIndex:(NSUInteger)index;
 - (CGSize)contentSizeForPagingScrollView;
 - (CGPoint)contentOffsetForPageAtIndex:(NSUInteger)index;
-- (CGRect)frameForDoneButtonAtOrientation:(UIInterfaceOrientation)orientation;
 - (CGRect)frameForCaptionView:(IDMCaptionView *)captionView atIndex:(NSUInteger)index;
 
 // Toolbar
@@ -133,7 +134,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 @synthesize leftArrowImage = _leftArrowImage, rightArrowImage = _rightArrowImage, actionButtonImage = _actionButtonImage;
 @synthesize displayArrowButton = _displayArrowButton;
 @synthesize arrowButtonsChangePhotosAnimated = _arrowButtonsChangePhotosAnimated;
-@synthesize forceHideStatusBar = _forceHideStatusBar;
 @synthesize usePopAnimation = _usePopAnimation;
 @synthesize disableVerticalSwipe = _disableVerticalSwipe;
 @synthesize dismissOnTouch = _dismissOnTouch;
@@ -168,7 +168,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         _displayArrowButton = YES;
         _displayCounterLabel = YES;
         
-        _forceHideStatusBar = YES;
+        _forceHideStatusBar = NO;
         _usePopAnimation = NO;
         _disableVerticalSwipe = NO;
         
@@ -195,7 +195,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         self.modalPresentationCapturesStatusBarAppearance = YES;
-        self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         
         // Listen for IDMPhoto notifications
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -207,38 +206,12 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     return self;
 }
 
-- (id)initWithPhotos:(NSArray *)photosArray inWindow:(UIWindow *)window {
+- (id)initWithPhotos:(NSArray *)photosArray animatedFromView:(UIView*)view fromViewController:(UIViewController *)fromViewController {
     if ((self = [self init])) {
-        _applicationWindow = window;
-        _photos = [[NSMutableArray alloc] initWithArray:photosArray];
-    }
-    return self;
-}
-
-- (id)initWithPhotos:(NSArray *)photosArray animatedFromView:(UIView*)view inWindow:(UIWindow *)window {
-    if ((self = [self init])) {
-        _applicationWindow = window;
+        _applicationWindow = fromViewController.view.window;
         _photos = [[NSMutableArray alloc] initWithArray:photosArray];
         _senderViewForAnimation = view;
-    }
-    return self;
-}
-
-- (id)initWithPhotoURLs:(NSArray *)photoURLsArray inWindow:(UIWindow *)window {
-    if ((self = [self init])) {
-        _applicationWindow = window;
-        NSArray *photosArray = [IDMPhoto photosWithURLs:photoURLsArray];
-        _photos = [[NSMutableArray alloc] initWithArray:photosArray];
-    }
-    return self;
-}
-
-- (id)initWithPhotoURLs:(NSArray *)photoURLsArray animatedFromView:(UIView*)view inWindow:(UIWindow *)window {
-    if ((self = [self init])) {
-        _applicationWindow = window;
-        NSArray *photosArray = [IDMPhoto photosWithURLs:photoURLsArray];
-        _photos = [[NSMutableArray alloc] initWithArray:photosArray];
-        _senderViewForAnimation = view;
+        _forceHideStatusBar = [fromViewController prefersStatusBarHidden];
     }
     return self;
 }
@@ -690,9 +663,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     // Super
     [super viewWillAppear:animated];
     
-    // Status Bar
-    _statusBarOriginallyHidden = [UIApplication sharedApplication].statusBarHidden;
-    
     // Update UI
     [self hideControlsAfterDelay];
 }
@@ -736,7 +706,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         }
     }
     else {
-        return [self areControlsHidden];
+        return false;
     }
 }
 
