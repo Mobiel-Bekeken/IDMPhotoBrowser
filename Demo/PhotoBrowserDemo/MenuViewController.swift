@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MenuViewController: UITableViewController, IDMPhotoBrowserDelegate { }
+class MenuViewController: UITableViewController, @MainActor IDMPhotoBrowserDelegate { }
 
 // MARK: View Lifecycle
 
@@ -59,6 +59,8 @@ extension MenuViewController {
 // MARK: Actions
 
 extension MenuViewController {
+    
+    @objc
 	func buttonWithImageOnScreenPressed(sender: AnyObject) {
 		let buttonSender = sender as? UIButton
 		
@@ -97,7 +99,7 @@ extension MenuViewController {
 		}
 		
 		// Create and setup browser
-		let browser: IDMPhotoBrowser = IDMPhotoBrowser(photos: photos, animatedFrom: buttonSender) // using initWithPhotos:animatedFromView:
+        let browser: IDMPhotoBrowser = IDMPhotoBrowser(photos: photos, animatedFrom: buttonSender, in: self.view.window) // using initWithPhotos:animatedFromView:
 		browser.delegate = self
 		browser.displayActionButton = false
 		browser.displayArrowButton = true
@@ -105,7 +107,7 @@ extension MenuViewController {
 		browser.usePopAnimation = true
 		browser.scaleImage = buttonSender?.currentImage
 		browser.dismissOnTouch = true
-		
+        
 		// Show
 		self.present(browser, animated: true, completion: nil)
 	}
@@ -223,21 +225,25 @@ extension MenuViewController {
 		}
 
 		// Create and setup browser
-		let browser = IDMPhotoBrowser.init(photos: photos)
+        let browser = IDMPhotoBrowser.init(photos: photos, in: self.view.window)
 		browser?.delegate = self
 
-		if indexPath.section == 1 { // Multiple photos
-			if indexPath.row == 1 { // Photos from Flickr
-				browser?.displayCounterLabel = true
+        if indexPath.section == 0 { // Local photo
+            browser?.customButtonImage = UIImage.init(named: "IDMPhotoBrowser_customDoneButton.png")?.withRenderingMode(.alwaysOriginal)
+            browser?.displayDeleteButton = true
+        }
+		else if indexPath.section == 1 { // Multiple photos
+            if indexPath.row == 0 { // Local photos
+                browser?.autoHideInterface = false
+            }
+			else if indexPath.row == 1 { // Photos from Flickr
+				browser?.displayCounterLabel = false
 				browser?.displayActionButton = false
 			} else if indexPath.row == 2 { // Photos from Flickr - Custom
-				browser?.actionButtonTitles      = ["Option 1", "Option 2", "Option 3", "Option 4"]
 				browser?.displayCounterLabel     = true
 				browser?.useWhiteBackgroundColor = true
 				browser?.leftArrowImage          = UIImage.init(named: "IDMPhotoBrowser_customArrowLeft.png")
 				browser?.rightArrowImage         = UIImage.init(named: "IDMPhotoBrowser_customArrowRight.png")
-				browser?.leftArrowSelectedImage  = UIImage.init(named: "IDMPhotoBrowser_customArrowLeftSelected.png")
-				browser?.rightArrowSelectedImage = UIImage.init(named: "IDMPhotoBrowser_customArrowRightSelected.png")
 				browser?.doneButtonImage         = UIImage.init(named: "IDMPhotoBrowser_customDoneButton.png")
 				browser?.view.tintColor          = UIColor.orange
 				browser?.progressTintColor       = UIColor.orange
@@ -270,10 +276,12 @@ extension MenuViewController {
 		print("Did dismiss photoBrowser with photo index: \(index), photo caption: \(photo.caption)")
 	}
 	
-	func photoBrowser(_ photoBrowser: IDMPhotoBrowser!, didDismissActionSheetWithButtonIndex buttonIndex: UInt, photoIndex: UInt) {
-		let photo: IDMPhoto = photoBrowser.photo(at: buttonIndex) as! IDMPhoto
-		print("Did dismiss photoBrowser with photo index: \(buttonIndex), photo caption: \(photo.caption)")
-		
-		UIAlertView(title: "Option \(buttonIndex+1)", message: nil, delegate: nil, cancelButtonTitle: "OK").show()
-	}
+    func photoBrowser(_ photoBrowser: IDMPhotoBrowser!, didRequestDelete photoURL: URL!) {
+        print("Did request delete of url: \(photoURL.absoluteString)")
+    }
+    
+    func photoBrowser(_ photoBrowser: IDMPhotoBrowser!, didRequestCustomAction photoURL: URL!) {
+        print("Did request custom action of url: \(photoURL.absoluteString)")
+        photoBrowser.close()
+    }
 }

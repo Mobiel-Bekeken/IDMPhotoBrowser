@@ -51,6 +51,9 @@
 // as long as the image can be re-loaded (from cache, file, or URL)
 - (void)unloadUnderlyingImage;
 
+- (NSString * _Nullable)photoPath;
+- (NSURL * _Nullable)photoURL;
+
 @optional
 
 // Return a caption string to be displayed over the image

@@ -8,7 +8,7 @@
 
 import UIKit
 
-@UIApplicationMain
+@main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 	var window: UIWindow?
 	var viewController: UIViewController?
@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 // MARK: - Application State
 
 extension AppDelegate {
-	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
 		
 		self.window = UIWindow.init(frame: UIScreen.main.bounds)
 		

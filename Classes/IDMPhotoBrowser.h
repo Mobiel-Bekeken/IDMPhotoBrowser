@@ -23,13 +23,14 @@
 - (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didShowPhotoAtIndex:(NSUInteger)index;
 - (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didDismissAtPageIndex:(NSUInteger)index;
 - (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser willDismissAtPageIndex:(NSUInteger)index;
-- (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didDismissActionSheetWithButtonIndex:(NSUInteger)buttonIndex photoIndex:(NSUInteger)photoIndex;
+- (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didRequestDelete:(NSURL *)photoURL;
+- (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didRequestCustomAction:(NSURL *)photoURL;
 - (IDMCaptionView *)photoBrowser:(IDMPhotoBrowser *)photoBrowser captionViewForPhotoAtIndex:(NSUInteger)index;
 - (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser imageFailed:(NSUInteger)index imageView:(IDMTapDetectingImageView *)imageView;
 @end
 
 // IDMPhotoBrowser
-@interface IDMPhotoBrowser : UIViewController <UIScrollViewDelegate, UIActionSheetDelegate>
+@interface IDMPhotoBrowser : UIViewController <UIScrollViewDelegate>
 
 // Properties
 @property (nonatomic, strong) id <IDMPhotoBrowserDelegate> delegate;
@@ -39,20 +40,21 @@
 @property (nonatomic) BOOL displayCounterLabel;
 @property (nonatomic) BOOL displayArrowButton;
 @property (nonatomic) BOOL displayActionButton;
-@property (nonatomic, strong) NSArray *actionButtonTitles;
-@property (nonatomic, weak) UIImage *leftArrowImage, *leftArrowSelectedImage;
-@property (nonatomic, weak) UIImage *rightArrowImage, *rightArrowSelectedImage;
-@property (nonatomic, weak) UIImage *actionButtonImage, *actionButtonSelectedImage;
+@property (nonatomic) BOOL displayDeleteButton;
+@property (nonatomic, strong) UIImage *customButtonImage;
+@property (nonatomic, strong) UIImage *leftArrowImage;
+@property (nonatomic, strong) UIImage *rightArrowImage;
+@property (nonatomic, strong) UIImage *actionButtonImage;
 
 // View customization
 @property (nonatomic) BOOL displayDoneButton;
 @property (nonatomic) BOOL useWhiteBackgroundColor;
-@property (nonatomic, weak) UIImage *doneButtonImage;
-@property (nonatomic, weak) UIColor *trackTintColor, *progressTintColor;
+@property (nonatomic, strong) UIImage *doneButtonImage;
+@property (nonatomic, strong) UIColor *trackTintColor, *progressTintColor;
 @property (nonatomic, assign) CGFloat doneButtonRightInset, doneButtonTopInset;
 @property (nonatomic, assign) CGSize doneButtonSize;
 
-@property (nonatomic, weak) UIImage *scaleImage;
+@property (nonatomic, strong) UIImage *scaleImage;
 
 @property (nonatomic) BOOL arrowButtonsChangePhotosAnimated;
 
@@ -73,16 +75,16 @@
 @property (nonatomic) float animationDuration;
 
 // Init
-- (id)initWithPhotos:(NSArray *)photosArray;
+- (id)initWithPhotos:(NSArray *)photosArray inWindow:(UIWindow *)window;
 
 // Init (animated from view)
-- (id)initWithPhotos:(NSArray *)photosArray animatedFromView:(UIView*)view;
+- (id)initWithPhotos:(NSArray *)photosArray animatedFromView:(UIView*)view inWindow:(UIWindow *)window;
 
 // Init with NSURL objects
-- (id)initWithPhotoURLs:(NSArray *)photoURLsArray;
+- (id)initWithPhotoURLs:(NSArray *)photoURLsArray inWindow:(UIWindow *)window;
 
 // Init with NSURL objects (animated from view)
-- (id)initWithPhotoURLs:(NSArray *)photoURLsArray animatedFromView:(UIView*)view;
+- (id)initWithPhotoURLs:(NSArray *)photoURLsArray animatedFromView:(UIView*)view inWindow:(UIWindow *)window;
 
 // Reloads the photo browser and refetches data
 - (void)reloadData;
@@ -92,5 +94,7 @@
 
 // Get IDMPhoto at index
 - (id<IDMPhoto>)photoAtIndex:(NSUInteger)index;
+
+- (void)close;
 
 @end
