@@ -15,7 +15,8 @@ let package = Package(
     targets: [
         .target(
             name: "IDMPhotoBrowser",
-            path: "Classes"
+            path: "Classes",
+            publicHeadersPath: "."
         )
     ]
 )
