@@ -1,0 +1,24 @@
+{
+  "originHash" : "150981bb5071c92dcd80d26b01170bf5a7f0711e8270f2ad716fbcb91f6a5df6",
+  "pins" : [
+    {
+      "identity" : "dacircularprogress",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tgymnich/DACircularProgress.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "2e207657acb473779c5f6722653505420c0bab28"
+      }
+    },
+    {
+      "identity" : "sdwebimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SDWebImage/SDWebImage.git",
+      "state" : {
+        "revision" : "2de3a496eaf6df9a1312862adcfd54acd73c39c0",
+        "version" : "5.21.7"
+      }
+    }
+  ],
+  "version" : 3
+}
