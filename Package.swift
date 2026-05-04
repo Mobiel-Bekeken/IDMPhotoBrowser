@@ -3,6 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "IDMPhotoBrowser",
+    defaultLocalization: "en",    
     platforms: [
         .iOS(.v15)
     ],
