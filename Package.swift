@@ -19,6 +19,10 @@ let package = Package(
     targets: [
         .target(
             name: "IDMPhotoBrowser",
+            dependencies: [
+                .product(name: "DACircularProgress", package: "DACircularProgress"),
+                .product(name: "SDWebImage", package: "SDWebImage")
+            ],
             path: "Classes",
             publicHeadersPath: "."
         )
