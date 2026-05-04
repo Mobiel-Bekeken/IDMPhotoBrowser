@@ -15,7 +15,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/SDWebImage/SDWebImage.git", from: "5.1.0"),        
-        .package(url: "https://github.com/tgymnich/DACircularProgress.git", branch: "master"),
+        .package(url: "https://github.com/Mobiel-Bekeken/DACircularProgress.git", branch: "master"),
     ],
     targets: [
         .target(

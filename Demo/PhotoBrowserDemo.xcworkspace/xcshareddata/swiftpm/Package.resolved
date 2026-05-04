@@ -1,13 +1,13 @@
 {
-  "originHash" : "150981bb5071c92dcd80d26b01170bf5a7f0711e8270f2ad716fbcb91f6a5df6",
+  "originHash" : "6c864fbc9998a5d3bbd6fd1bb3df1487ba497d37ff08acd99c5501b693cf72ce",
   "pins" : [
     {
       "identity" : "dacircularprogress",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/tgymnich/DACircularProgress.git",
+      "location" : "https://github.com/Mobiel-Bekeken/DACircularProgress.git",
       "state" : {
-        "branch" : "master",
-        "revision" : "2e207657acb473779c5f6722653505420c0bab28"
+        "revision" : "2e207657acb473779c5f6722653505420c0bab28",
+        "version" : "2.3.2"
       }
     },
     {

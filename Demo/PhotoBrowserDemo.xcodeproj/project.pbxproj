@@ -21,6 +21,7 @@
 		4C6F97DA14AF760500F8389A /* photo4m.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C6F97D214AF760500F8389A /* photo4m.jpg */; };
 		727988B1187B3B5400966C66 /* IDMPBLocalizations.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 727988B0187B3B5400966C66 /* IDMPBLocalizations.bundle */; };
 		727988B7187B3CF100966C66 /* IDMPhotoBrowser.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 727988B6187B3CF100966C66 /* IDMPhotoBrowser.podspec */; };
+		766DB3E92FA88F4700B96485 /* DACircularProgress in Frameworks */ = {isa = PBXBuildFile; productRef = 766DB3E82FA88F4700B96485 /* DACircularProgress */; };
 		76D5B2FA2FA87E0200A0F857 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 76D5B2F92FA87E0200A0F857 /* SDWebImage */; };
 		76D5B2FD2FA87E1A00A0F857 /* DACircularProgress in Frameworks */ = {isa = PBXBuildFile; productRef = 76D5B2FC2FA87E1A00A0F857 /* DACircularProgress */; };
 		76D5B3352FA87F7400A0F857 /* POPVector.mm in Sources */ = {isa = PBXBuildFile; fileRef = 76D5B3332FA87F7400A0F857 /* POPVector.mm */; };
@@ -52,7 +53,6 @@
 		D157496C178DB94900B0211A /* IDMTapDetectingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D1574957178DB94900B0211A /* IDMTapDetectingImageView.m */; };
 		D157496D178DB94900B0211A /* IDMTapDetectingView.m in Sources */ = {isa = PBXBuildFile; fileRef = D1574959178DB94900B0211A /* IDMTapDetectingView.m */; };
 		D157496E178DB94900B0211A /* IDMZoomingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = D157495B178DB94900B0211A /* IDMZoomingScrollView.m */; };
-		D1574971178DB95300B0211A /* README.markdown in Resources */ = {isa = PBXBuildFile; fileRef = D157496F178DB95300B0211A /* README.markdown */; };
 		D1574972178DB95300B0211A /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = D1574970178DB95300B0211A /* LICENSE.txt */; };
 		D172B9391DF396E300F56D69 /* IDMPhotoBrowser_customArrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = D172B92F1DF396E300F56D69 /* IDMPhotoBrowser_customArrowLeft.png */; };
 		D172B93A1DF396E300F56D69 /* IDMPhotoBrowser_customArrowLeft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D172B9301DF396E300F56D69 /* IDMPhotoBrowser_customArrowLeft@2x.png */; };
@@ -180,7 +180,6 @@
 		D1574959178DB94900B0211A /* IDMTapDetectingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDMTapDetectingView.m; sourceTree = "<group>"; };
 		D157495A178DB94900B0211A /* IDMZoomingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDMZoomingScrollView.h; sourceTree = "<group>"; };
 		D157495B178DB94900B0211A /* IDMZoomingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDMZoomingScrollView.m; sourceTree = "<group>"; };
-		D157496F178DB95300B0211A /* README.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.markdown; path = ../../README.markdown; sourceTree = "<group>"; };
 		D1574970178DB95300B0211A /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE.txt; path = ../../LICENSE.txt; sourceTree = "<group>"; };
 		D172B92F1DF396E300F56D69 /* IDMPhotoBrowser_customArrowLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IDMPhotoBrowser_customArrowLeft.png; path = "PhotoBrowserDemo/Custom Images/IDMPhotoBrowser_customArrowLeft.png"; sourceTree = SOURCE_ROOT; };
 		D172B9301DF396E300F56D69 /* IDMPhotoBrowser_customArrowLeft@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "IDMPhotoBrowser_customArrowLeft@2x.png"; path = "PhotoBrowserDemo/Custom Images/IDMPhotoBrowser_customArrowLeft@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -211,6 +210,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D1FA3A911805C340000FFE18 /* Security.framework in Frameworks */,
+				766DB3E92FA88F4700B96485 /* DACircularProgress in Frameworks */,
 				D1890F7217C66CA70065C101 /* ImageIO.framework in Frameworks */,
 				D1A1935D1758F42A00CE615F /* MobileCoreServices.framework in Frameworks */,
 				76D5B2FD2FA87E1A00A0F857 /* DACircularProgress in Frameworks */,
@@ -297,7 +297,6 @@
 				D1A9ED501DEB684B00C238DA /* PhotoBrowserDemo-Bridging-Header.h */,
 				4C6F979914AF734900F8389A /* PhotoBrowserDemo-Info.plist */,
 				4C6F979F14AF734900F8389A /* PhotoBrowserDemo-Prefix.pch */,
-				D157496F178DB95300B0211A /* README.markdown */,
 			);
 			name = "Supporting Files";
 			path = PhotoBrowserDemo;
@@ -512,7 +511,7 @@
 			mainGroup = 4C6F978214AF734800F8389A;
 			packageReferences = (
 				76D5B2F82FA87E0200A0F857 /* XCRemoteSwiftPackageReference "SDWebImage" */,
-				76D5B2FB2FA87E1A00A0F857 /* XCRemoteSwiftPackageReference "DACircularProgress" */,
+				766DB3E72FA88F4700B96485 /* XCRemoteSwiftPackageReference "DACircularProgress" */,
 			);
 			productRefGroup = 4C6F978E14AF734900F8389A /* Products */;
 			projectDirPath = "";
@@ -544,7 +543,6 @@
 				4C6F97DA14AF760500F8389A /* photo4m.jpg in Resources */,
 				D157496A178DB94900B0211A /* IDMPhotoBrowser.bundle in Resources */,
 				D172B93A1DF396E300F56D69 /* IDMPhotoBrowser_customArrowLeft@2x.png in Resources */,
-				D1574971178DB95300B0211A /* README.markdown in Resources */,
 				D1574972178DB95300B0211A /* LICENSE.txt in Resources */,
 				D172B9421DF396E300F56D69 /* IDMPhotoBrowser_customDoneButton@2x.png in Resources */,
 				D114BB411A32269C00E677FE /* Launch Screen.xib in Resources */,
@@ -878,6 +876,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		766DB3E72FA88F4700B96485 /* XCRemoteSwiftPackageReference "DACircularProgress" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Mobiel-Bekeken/DACircularProgress.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.2;
+			};
+		};
 		76D5B2F82FA87E0200A0F857 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImage.git";
@@ -897,6 +903,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		766DB3E82FA88F4700B96485 /* DACircularProgress */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 766DB3E72FA88F4700B96485 /* XCRemoteSwiftPackageReference "DACircularProgress" */;
+			productName = DACircularProgress;
+		};
 		76D5B2F92FA87E0200A0F857 /* SDWebImage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 76D5B2F82FA87E0200A0F857 /* XCRemoteSwiftPackageReference "SDWebImage" */;
