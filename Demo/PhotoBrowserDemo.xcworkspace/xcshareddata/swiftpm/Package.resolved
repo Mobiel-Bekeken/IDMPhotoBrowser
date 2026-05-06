@@ -1,5 +1,5 @@
 {
-  "originHash" : "6c864fbc9998a5d3bbd6fd1bb3df1487ba497d37ff08acd99c5501b693cf72ce",
+  "originHash" : "1bf0cb16d7b51908abee5a763961c2799e1f5044d41563d7c219bcef18022d18",
   "pins" : [
     {
       "identity" : "dacircularprogress",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "2e207657acb473779c5f6722653505420c0bab28",
         "version" : "2.3.2"
+      }
+    },
+    {
+      "identity" : "pop",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Mobiel-Bekeken/pop.git",
+      "state" : {
+        "revision" : "677fa4808d592a27a8238d77a231f71b7d68eae9",
+        "version" : "1.0.13"
       }
     },
     {
