@@ -26,6 +26,8 @@ let package = Package(
                 .product(name: "SDWebImage", package: "SDWebImage"),
                 .product(name: "pop", package: "pop")
             ],
+            path: "Classes",
+            publicHeadersPath: ".",
             exclude: [
                 "IDMPBLocalizations.bundle",
                 "IDMPhotoBrowser.bundle",
@@ -33,9 +35,7 @@ let package = Package(
             resources: [
                 .process("IDMPBLocalizations.bundle"),
                 .process("IDMPhotoBrowser.bundle")
-            ],
-            path: "Classes",
-            publicHeadersPath: "."
+            ]
         )
     ]
 )
