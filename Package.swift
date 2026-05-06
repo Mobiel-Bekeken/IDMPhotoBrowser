@@ -24,7 +24,7 @@ let package = Package(
             dependencies: [
                 .product(name: "DACircularProgress", package: "DACircularProgress"),
                 .product(name: "SDWebImage", package: "SDWebImage"),
-                .product(name: "pop", package: "pop)
+                .product(name: "pop", package: "pop")
             ],
             exclude: [
                 "IDMPBLocalizations.bundle",
