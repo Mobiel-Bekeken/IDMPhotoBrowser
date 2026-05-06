@@ -27,11 +27,11 @@ let package = Package(
                 .product(name: "pop", package: "pop")
             ],
             path: "Classes",
-            publicHeadersPath: ".",
             exclude: [
                 "IDMPBLocalizations.bundle",
                 "IDMPhotoBrowser.bundle",
             ],
+            publicHeadersPath: ".",
             resources: [
                 .process("IDMPBLocalizations.bundle"),
                 .process("IDMPhotoBrowser.bundle")
