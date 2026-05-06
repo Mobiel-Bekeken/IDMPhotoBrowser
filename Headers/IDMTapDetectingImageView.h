@@ -1,0 +1,1 @@
+../Classes/IDMTapDetectingImageView.h

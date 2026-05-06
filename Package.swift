@@ -26,16 +26,21 @@ let package = Package(
                 .product(name: "SDWebImage", package: "SDWebImage"),
                 .product(name: "pop", package: "pop")
             ],
-            path: "Classes",
-            exclude: [
-                "IDMPBLocalizations.bundle",
-                "IDMPhotoBrowser.bundle",
+            path: ".",
+            sources: [
+                "Classes/IDMCaptionView.m",
+                "Classes/IDMPhoto.m",
+                "Classes/IDMPhotoBrowser.m",
+                "Classes/IDMTapDetectingImageView.m",
+                "Classes/IDMTapDetectingView.m",
+                "Classes/IDMUtils.m",
+                "Classes/IDMZoomingScrollView.m"
             ],
-            publicHeadersPath: ".",
             resources: [
-                .process("IDMPBLocalizations.bundle"),
-                .process("IDMPhotoBrowser.bundle")
-            ]
+                .copy("Classes/IDMPBLocalizations.bundle"),
+                .copy("Classes/IDMPhotoBrowser.bundle")
+            ],
+            publicHeadersPath: "Headers",
         )
     ]
 )

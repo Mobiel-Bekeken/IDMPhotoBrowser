@@ -13,9 +13,22 @@
 
 #import "pop/POP.h"
 
+static NSBundle *IDMPhotoBrowserResourceBundle(void) {
+#ifdef SWIFTPM_MODULE_BUNDLE
+    return SWIFTPM_MODULE_BUNDLE;
+#else
+    return [NSBundle bundleForClass:[IDMPhotoBrowser class]];
+#endif
+}
+
+static UIImage *IDMPhotoBrowserImageNamed(NSString *imageName) {
+    UIImage *image = [UIImage imageNamed:imageName inBundle:IDMPhotoBrowserResourceBundle() compatibleWithTraitCollection:nil];
+    return image ?: [UIImage imageNamed:imageName];
+}
+
 #ifndef IDMPhotoBrowserLocalizedStrings
 #define IDMPhotoBrowserLocalizedStrings(key) \
-NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBundle bundleForClass: [IDMPhotoBrowser class]] pathForResource:@"IDMPBLocalizations" ofType:@"bundle"]], nil)
+NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[IDMPhotoBrowserResourceBundle() pathForResource:@"IDMPBLocalizations" ofType:@"bundle"]], nil)
 #endif
 
 // Private
@@ -591,10 +604,10 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     }
     
     UIImage *leftButtonImage = (_leftArrowImage == nil) ?
-    [UIImage imageNamed:@"IDMPhotoBrowser.bundle/images/IDMPhotoBrowser_arrowLeft.png"]          : _leftArrowImage;
+    IDMPhotoBrowserImageNamed(@"IDMPhotoBrowser.bundle/images/IDMPhotoBrowser_arrowLeft.png")          : _leftArrowImage;
     
     UIImage *rightButtonImage = (_rightArrowImage == nil) ?
-    [UIImage imageNamed:@"IDMPhotoBrowser.bundle/images/IDMPhotoBrowser_arrowRight.png"]         : _rightArrowImage;
+    IDMPhotoBrowserImageNamed(@"IDMPhotoBrowser.bundle/images/IDMPhotoBrowser_arrowRight.png")         : _rightArrowImage;
     
     // Arrows
     _previousButton = [[UIBarButtonItem alloc] initWithImage:leftButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(gotoPreviousPage)];
