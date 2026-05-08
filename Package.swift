@@ -41,6 +41,13 @@ let package = Package(
                 .copy("Classes/IDMPhotoBrowser.bundle")
             ],
             publicHeadersPath: "Headers",
+            linkerSettings: [
+                .linkedFramework("MessageUI"),
+                .linkedFramework("QuartzCore"),
+                .linkedFramework("SystemConfiguration"),
+                .linkedFramework("MobileCoreServices"),
+                .linkedFramework("Security"),
+            ]
         )
     ]
 )
